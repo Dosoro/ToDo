@@ -1,10 +1,14 @@
 import express from "express";
 import authRoutes from "./authRoutes.js";
+import todoRoutes from "./todoRoutes.js";
 
 const router = express.Router();
 
 // Mount auth routes at /auth
 router.use("/auth", authRoutes);
+
+// Mount todo routes at /todos
+router.use("/todos", todoRoutes);
 
 // Future routes will go here
 // route.use('/todos', todoRoutes);
