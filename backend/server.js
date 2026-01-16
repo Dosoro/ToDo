@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import env from "./config/env.js";
 import connectDB from "./config/database.js";
+import v1Routes from "./routes/v1/index.js";
 
 const app = express();
 
@@ -26,6 +27,9 @@ if (env.env === "development") {
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// API routes
+app.use("/api/v1", v1Routes);
 
 // Test route
 app.get("/api/health", (req, res) => {
