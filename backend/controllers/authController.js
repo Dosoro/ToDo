@@ -114,3 +114,22 @@ export const login = async (req, res) => {
     });
   }
 };
+
+// @desc   Get current user
+// @route  GET /api/v1/auth/me
+// @access Private
+export const getMe = async (req, res) => {
+  try {
+    // req.user  is set by protected middleware
+    res.status(200).json({
+      success: true,
+      data: req.user,
+    });
+  } catch (error) {
+    console.error("Error in getMe:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
