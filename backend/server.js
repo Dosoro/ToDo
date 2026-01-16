@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1", v1Routes);
 
 // Test route
-app.get("/api/health", (req, res) => {
+app.get("/api/v1/health", (req, res) => {
   res.status(200).json({
     success: true,
     message: "Server is running!",
@@ -55,7 +55,7 @@ const startServer = async () => {
 
     app.listen(env.port, () => {
       console.log(`Server running on port ${env.port} in ${env.env} mode`);
-      console.log(`Health check: http://localhost:${env.port}/api/health`);
+      console.log(`Health check: http://localhost:${env.port}/api/v1/health`);
     });
   } catch (error) {
     console.error("Failed to start server:", error);
