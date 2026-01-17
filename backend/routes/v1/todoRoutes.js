@@ -7,6 +7,11 @@ import {
   deleteTodo,
 } from "../../controllers/todoController.js";
 import { protect } from "../../middleware/auth.js";
+import {
+  createTodoValidation,
+  updateTodoValidation,
+} from "../../middleware/validators.js";
+import { validate } from "../../middleware/validate.js";
 
 const router = express.Router();
 
@@ -15,11 +20,18 @@ router.use(protect);
 
 // GET /api/v1/todos - Get all todos
 // POST /api/v1/todos - Create todo
-router.route("/").get(getTodos).post(createTodo);
+router
+  .route("/")
+  .get(getTodos)
+  .post(createTodoValidation, validate, createTodo);
 
 // GET /api/v1/todos/:id - Get single todo
 // PUT /api/v1/todos/:id - Update todo
 // DELETE /api/v1/todos/:id - Delete todo
-router.route("/:id").get(getTodo).put(updateTodo).delete(deleteTodo);
+router
+  .route("/:id")
+  .get(getTodo)
+  .put(updateTodoValidation, validate, updateTodo)
+  .delete(deleteTodo);
 
 export default router;

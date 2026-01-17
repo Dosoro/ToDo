@@ -1,5 +1,9 @@
 import User from "../models/User.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../utils/jwt.js";
 
 // @desc   Register new user
 // @route  POST /api/v1/auth/register
@@ -127,6 +131,58 @@ export const getMe = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in getMe:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+// @desc   Refresh access token
+// @route  POST /api/v1/auth/refresh
+// @access Public (requires refresh token)
+export const refresh = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        success: false,
+        message: "Refresh token is required",
+      });
+    }
+
+    // Verify refresh token
+    const decoded = verifyRefreshToken(refreshToken);
+
+    if (!decoded) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid or expired refresh token",
+      });
+    }
+
+    // Check if user still exists
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Generate new access token
+    const accessToken = generateAccessToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        accessToken,
+      },
+    });
+  } catch (error) {
+    console.error("Error in refresh:", error);
     res.status(500).json({
       success: false,
       message: "Server error",
