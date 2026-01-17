@@ -5,9 +5,26 @@ import Todo from "../models/Todo.js";
 // @access Private
 export const getTodos = async (req, res) => {
   try {
-    const todos = await Todo.find({ userId: req.user._id }).sort({
-      createdAt: -1,
-    });
+    // 1. Build query object
+    const query = { userId: req.user._id };
+
+    // 2. Add completed filter if provided
+    if (req.query.completed !== undefined) {
+      query.completed = req.query.completed === "true";
+    }
+
+    // 3. Add search filter if provided
+    if (req.query.search) {
+      query.title = { $regex: req.query.search, $options: "i" };
+    }
+
+    // 4. Add priority filter if provided
+    if (req.query.priority) {
+      query.priority = req.query.priority;
+    }
+
+    // 5. Use the query to fetch todos
+    const todos = await Todo.find(query).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
