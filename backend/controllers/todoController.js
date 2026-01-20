@@ -23,14 +23,45 @@ export const getTodos = async (req, res) => {
       query.priority = req.query.priority;
     }
 
-    // 5. Use the query to fetch todos
-    const todos = await Todo.find(query).sort({ createdAt: -1 });
+    // 5. Pagination
+    const allowedSortFields = ["createdAt", "title", "priority", "dueDate"];
+    // ...filters...
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    let sortBy = req.query.sortBy || "createdAt";
+    const order = req.query.order || "desc";
+
+    // Validation
+    if (page < 1 || limit < 1 || limit > 100) {
+      return res.status(400).json({
+        error: "Invalid pagination parameters",
+      });
+    }
+
+    if (!allowedSortFields.includes(sortBy)) {
+      sortBy = "createdAt";
+    }
+
+    const skip = (page - 1) * limit;
+    const total = await Todo.countDocuments(query);
+
+    const todo = await Todo.find(query)
+      .sort({ [sortBy]: order === "asc" ? 1 : -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalPages = Math.ceil(total / limit);
 
     res.status(200).json({
       success: true,
-      count: todos.length,
-      data: todos,
+      count: todo.length,
+      total: total,
+      page: page,
+      pages: totalPages,
+      data: todo,
     });
+
+    // Eo Pagionation
   } catch (error) {
     console.error("Error in getTodos:", error);
     res.status(500).json({
