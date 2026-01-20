@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+// ========================================
+// USER SCHEMA
+// ========================================
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -29,7 +32,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true, // Adds createdAt and updatedAt automatically
-  }
+  },
 );
 
 // Hash password before saving

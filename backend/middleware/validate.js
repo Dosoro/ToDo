@@ -1,6 +1,9 @@
 import { validationResult } from "express-validator";
 
-// Middleware to check validation results
+// ========================================
+// VALIDATION ERROR HANDLER
+// ========================================
+// Checks validation results and returns errors if any
 export const validate = (req, res, next) => {
   const errors = validationResult(req);
 

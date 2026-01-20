@@ -12,6 +12,9 @@ import {
 } from "../../middleware/validators.js";
 import { validate } from "../../middleware/validate.js";
 
+// ========================================
+// AUTH ROUTES
+// ========================================
 const router = express.Router();
 
 // POST /api/v1/auth/register

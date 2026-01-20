@@ -1,14 +1,18 @@
 import Todo from "../models/Todo.js";
 
+// ========================================
+// GET ALL TODOS (with filters, pagination, sorting)
+// ========================================
 // @desc   Get all todos for logged-in user
 // @route  GET /api/v1/todos
 // @access Private
 export const getTodos = async (req, res) => {
   try {
-    // 1. Build query object
+    // Build base query - always filter by user
     const query = { userId: req.user._id };
 
-    // 2. Add completed filter if provided
+    // ========== FILTERS ==========
+    // Add completed filter if provided
     if (req.query.completed !== undefined) {
       query.completed = req.query.completed === "true";
     }
@@ -23,7 +27,7 @@ export const getTodos = async (req, res) => {
       query.priority = req.query.priority;
     }
 
-    // 5. Pagination
+    // ========== PAGINATION & SORTING ==========
     const allowedSortFields = ["createdAt", "title", "priority", "dueDate"];
     // ...filters...
     const page = parseInt(req.query.page) || 1;
@@ -45,6 +49,7 @@ export const getTodos = async (req, res) => {
     const skip = (page - 1) * limit;
     const total = await Todo.countDocuments(query);
 
+    // Fetch paginated, sorted, filtered todos
     const todo = await Todo.find(query)
       .sort({ [sortBy]: order === "asc" ? 1 : -1 })
       .skip(skip)
@@ -71,6 +76,9 @@ export const getTodos = async (req, res) => {
   }
 };
 
+// ========================================
+// GET SINGLE TODO
+// ========================================
 // @desc   Get single todo
 // @route  GET /api/v1/todos/:id
 // @access Private
@@ -106,6 +114,9 @@ export const getTodo = async (req, res) => {
   }
 };
 
+// ========================================
+// CREATE TODO
+// ========================================
 // @desc   Create new todo
 // @route  POST /api/v1/todos
 // @access Private
@@ -135,6 +146,9 @@ export const createTodo = async (req, res) => {
   }
 };
 
+// ========================================
+// UPDATE TODO
+// ========================================
 // @desc   Update todo
 // @route  PUT /api/v1/todos/:id
 // @access Private
@@ -176,6 +190,9 @@ export const updateTodo = async (req, res) => {
   }
 };
 
+// ========================================
+// DELETE TODO
+// ========================================
 // @desc   Delete todo
 // @route  DELETE /api/v1/todos/:id
 // @access Private

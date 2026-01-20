@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+// ========================================
+// TODO SCHEMA
+// ========================================
 const todoSchema = new mongoose.Schema(
   {
     title: {
@@ -33,7 +36,7 @@ const todoSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Index for faster queries (find todos by user)

@@ -13,6 +13,9 @@ import {
 } from "../../middleware/validators.js";
 import { validate } from "../../middleware/validate.js";
 
+// ========================================
+// TODO ROUTES (All Protected)
+// ========================================
 const router = express.Router();
 
 // All routes  are protected (require authentication)

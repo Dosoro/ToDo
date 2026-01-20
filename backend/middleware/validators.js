@@ -1,6 +1,8 @@
 import { body } from "express-validator";
 
-// Auth validation rules
+// ========================================
+// AUTH VALIDATION RULES
+// ========================================
 export const registerValidation = [
   body("name")
     .trim()
@@ -36,7 +38,9 @@ export const loginValidation = [
   body("password").notEmpty().withMessage("Password is required"),
 ];
 
-// Todo validation rules
+// ========================================
+// TODO VALIDATION RULES
+// ========================================
 export const createTodoValidation = [
   body("title")
     .trim()

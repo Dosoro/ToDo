@@ -5,6 +5,9 @@ import {
   verifyRefreshToken,
 } from "../utils/jwt.js";
 
+// ========================================
+// REGISTER USER
+// ========================================
 // @desc   Register new user
 // @route  POST /api/v1/auth/register
 // @access Public
@@ -56,6 +59,9 @@ export const register = async (req, res) => {
   }
 };
 
+// ========================================
+// LOGIN USER
+// ========================================
 // @desc    Login user
 // @route   POST /api/v1/auth/login
 // @access  Public
@@ -119,6 +125,9 @@ export const login = async (req, res) => {
   }
 };
 
+// ========================================
+// GET CURRENT USER
+// ========================================
 // @desc   Get current user
 // @route  GET /api/v1/auth/me
 // @access Private
@@ -138,6 +147,9 @@ export const getMe = async (req, res) => {
   }
 };
 
+// ========================================
+// REFRESH ACCESS TOKEN
+// ========================================
 // @desc   Refresh access token
 // @route  POST /api/v1/auth/refresh
 // @access Public (requires refresh token)

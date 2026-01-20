@@ -1,6 +1,9 @@
 import { verifyAccessToken } from "../utils/jwt.js";
 import User from "../models/User.js";
 
+// ========================================
+// PROTECT ROUTES - Verify JWT Token
+// ========================================
 export const protect = async (req, res, next) => {
   try {
     let token;
