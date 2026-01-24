@@ -1,8 +1,15 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Auth from "./pages/Auth.jsx";
+import { useAuth } from "./context/AuthContext";
+
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold text-center pt-10">Todo App</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/" element={<h1>Home Page (coming soon)</h1>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
