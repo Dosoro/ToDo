@@ -16,8 +16,10 @@ function Register() {
       await register({ email, password, name });
       // Success! AuthContext handles setting user
       // Later we'll add redirect to home page
-    } catch (err) {
-      setError("Register failed. Check your credentials.");
+    } catch (error) {
+      console.error(error);
+      const message = error.response?.data?.message || "Registeration failed";
+      setError(message);
     }
   };
 
@@ -62,7 +64,7 @@ function Register() {
         disabled={loading}
         className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
       >
-        {loading ? "Logging in..." : "Login"}
+        {loading ? "Registering..." : "Register"}
       </button>
     </form>
   );

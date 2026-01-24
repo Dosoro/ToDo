@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const { login, loading } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -13,10 +15,11 @@ function Login() {
 
     try {
       await login({ email, password });
-      // Success! AuthContext handles setting user
-      // Later we'll add redirect to home page
-    } catch (err) {
-      setError("Login failed. Check your credentials.");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      const message = error.response?.data?.message || "Login failed";
+      setError(message);
     }
   };
 
