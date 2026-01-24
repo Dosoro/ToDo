@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const { register, loading } = useAuth();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,8 +16,7 @@ function Register() {
 
     try {
       await register({ email, password, name });
-      // Success! AuthContext handles setting user
-      // Later we'll add redirect to home page
+      navigate("/");
     } catch (error) {
       console.error(error);
       const message = error.response?.data?.message || "Registeration failed";
