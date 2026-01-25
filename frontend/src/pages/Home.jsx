@@ -7,6 +7,7 @@ function Home() {
   const { user, logout } = useAuth();
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState("all");
 
   // Fetch todos when component mounts
   const fetchTodos = async () => {
@@ -45,7 +46,15 @@ function Home() {
     } catch (error) {
       console.error("Failed to delete todo:", error);
     }
-  };
+  }; // ← Close handleDelete here
+
+  // Filter todos (OUTSIDE handleDelete)
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === "active") return !todo.completed;
+    if (filter === "completed") return todo.completed;
+    return true; // Add this for 'all'
+  });
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
@@ -68,7 +77,28 @@ function Home() {
             <p className="text-gray-600">No todos yet. Create one above!</p>
           ) : (
             <div className="space-y-2">
-              {todos.map((todo) => (
+              {/* Filter buttons */}
+              <div className="flex gap-2 mb-4">
+                <button
+                  onClick={() => setFilter("all")}
+                  className={`px-4 py-2 rounded ${filter === "all" ? "bg-blue-500 text-white" : "bg-white"}`}
+                >
+                  All
+                </button>
+                <button
+                  onClick={() => setFilter("completed")}
+                  className={`px-4 py-2 rounded ${filter === "completed" ? "bg-blue-500 text-white" : "bg-white"}`}
+                >
+                  Completed
+                </button>
+                <button
+                  onClick={() => setFilter("active")}
+                  className={`px-4 py-2 rounded ${filter === "active" ? "bg-blue-500 text-white" : "bg-white"}`}
+                >
+                  Active
+                </button>
+              </div>
+              {filteredTodos.map((todo) => (
                 <div
                   key={todo._id}
                   className="bg-white p-4 rounded-lg shadow flex items-center gap-4"
