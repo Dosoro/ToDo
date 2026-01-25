@@ -8,6 +8,7 @@ function Home() {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
   // Fetch todos when component mounts
   const fetchTodos = async () => {
@@ -46,13 +47,23 @@ function Home() {
     } catch (error) {
       console.error("Failed to delete todo:", error);
     }
-  }; // ← Close handleDelete here
+  };
 
-  // Filter todos (OUTSIDE handleDelete)
   const filteredTodos = todos.filter((todo) => {
+    if (search) {
+      const searchLower = search.toLowerCase();
+      const matchesTitle = todo.title.toLowerCase().includes(searchLower);
+      const matchesDescription = todo.description
+        ?.toLowerCase()
+        .includes(searchLower);
+      if (!matchesTitle && !matchesDescription) {
+        return false;
+      }
+    }
+
     if (filter === "active") return !todo.completed;
     if (filter === "completed") return todo.completed;
-    return true; // Add this for 'all'
+    return true;
   });
 
   return (
@@ -77,6 +88,16 @@ function Home() {
             <p className="text-gray-600">No todos yet. Create one above!</p>
           ) : (
             <div className="space-y-2">
+              {/* Search uinput */}
+              <div className="flex gap-2 mb-4">
+                <input
+                  type="text"
+                  placeholder="Search todos..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full px-4 py-2 border  border-gray-300 rounded-lg"
+                />
+              </div>
               {/* Filter buttons */}
               <div className="flex gap-2 mb-4">
                 <button
