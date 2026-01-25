@@ -9,6 +9,7 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("date-desc");
 
   // Fetch todos when component mounts
   const fetchTodos = async () => {
@@ -66,6 +67,15 @@ function Home() {
     return true;
   });
 
+  const sortedTodos = [...filteredTodos].sort((a, b) => {
+    if (sortBy === "date-desc")
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    if (sortBy === "date-asc")
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    if (sortBy === "title-asc") return a.title.localeCompare(b.title);
+    if (sortBy === "title-desc") return b.title.localeCompare(a.title);
+  });
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
@@ -97,6 +107,17 @@ function Home() {
                   onChange={(e) => setSearch(e.target.value)}
                   className="w-full px-4 py-2 border  border-gray-300 rounded-lg"
                 />
+                {/* Sort dropdown */}
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-4 py-2 font-semibold border-gray-300 rounded-lg"
+                >
+                  <option value="date-desc">Newest First</option>
+                  <option value="date-asc">Oldest First</option>
+                  <option value="title-asc">Title A-Z</option>
+                  <option value="title-desc">Title Z-A</option>
+                </select>
               </div>
               {/* Filter buttons */}
               <div className="flex gap-2 mb-4">
@@ -119,7 +140,7 @@ function Home() {
                   Active
                 </button>
               </div>
-              {filteredTodos.map((todo) => (
+              {sortedTodos.map((todo) => (
                 <div
                   key={todo._id}
                   className="bg-white p-4 rounded-lg shadow flex items-center gap-4"
